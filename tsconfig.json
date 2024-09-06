@@ -9,10 +9,16 @@
     }
   ],
   "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@typeberry/*": ["./node_modules/typeberry/packages/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@typeberry/*": [
+        "./node_modules/typeberry/packages/*"
+      ]
     }
   }
 }

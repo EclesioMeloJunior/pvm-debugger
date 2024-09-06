@@ -31,9 +31,17 @@ function passArray8ToWasm0(arg, malloc) {
  * @param {bigint} gas
  */
 export function reset(program, registers, gas) {
-  const ptr0 = passArray8ToWasm0(program, wasm.__wbindgen_malloc);
+  var malloc = null;
+
+  if ("__wbindgen_add_to_stack_pointer" in wasm) {
+    malloc = wasm.wasm.__wbindgen_malloc;
+  } else if ("malloc" in wasm) {
+    malloc = wasm.malloc;
+  }
+
+  const ptr0 = passArray8ToWasm0(program, malloc);
   const len0 = WASM_VECTOR_LEN;
-  const ptr1 = passArray8ToWasm0(registers, wasm.__wbindgen_malloc);
+  const ptr1 = passArray8ToWasm0(registers, malloc);
   const len1 = WASM_VECTOR_LEN;
   console.log("---- reset ----", wasm, ptr0, len0, ptr1, len1, gas);
   wasm.reset(ptr0, len0, ptr1, len1, gas);
@@ -92,16 +100,31 @@ function getArrayU8FromWasm0(ptr, len) {
  * @returns {Uint8Array}
  */
 export function getRegisters() {
+  var retptr = null;
+
   try {
-    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    if ("__wbindgen_add_to_stack_pointer" in wasm) {
+      retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    } else if ("malloc" in wasm) {
+      retptr = wasm.malloc(16);
+    }
+
     wasm.getRegisters(retptr);
     var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
     var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
     var v1 = getArrayU8FromWasm0(r0, r1).slice();
-    wasm.__wbindgen_free(r0, r1 * 1, 1);
+
+    if ("__wbindgen_free" in wasm) {
+      wasm.__wbindgen_free(r0, r1 * 1, 1);
+    } else if ("free" in wasm) {
+      wasm.free(retptr);
+    }
+
     return v1;
   } finally {
-    wasm.__wbindgen_add_to_stack_pointer(16);
+    if ("__wbindgen_add_to_stack_pointer" in wasm) {
+      retptr = wasm.__wbindgen_add_to_stack_pointer(16);
+    }
   }
 }
 
@@ -110,16 +133,31 @@ export function getRegisters() {
  * @returns {Uint8Array}
  */
 export function getPageDump(index) {
+  var retptr = null;
+
   try {
-    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    if ("__wbindgen_add_to_stack_pointer" in wasm) {
+      retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    } else if ("malloc" in wasm) {
+      retptr = wasm.malloc(16);
+    }
+
     wasm.getPageDump(retptr, index);
     var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
     var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
     var v1 = getArrayU8FromWasm0(r0, r1).slice();
-    wasm.__wbindgen_free(r0, r1 * 1, 1);
+
+    if ("__wbindgen_free" in wasm) {
+      wasm.__wbindgen_free(r0, r1 * 1, 1);
+    } else if ("free" in wasm) {
+      wasm.free(retptr);
+    }
+
     return v1;
   } finally {
-    wasm.__wbindgen_add_to_stack_pointer(16);
+    if ("__wbindgen_add_to_stack_pointer" in wasm) {
+      retptr = wasm.__wbindgen_add_to_stack_pointer(16);
+    }
   }
 }
 
